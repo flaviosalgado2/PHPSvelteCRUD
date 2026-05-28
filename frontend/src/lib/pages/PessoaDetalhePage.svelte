@@ -121,72 +121,72 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               {#if pessoa.tipo === "fisica"}
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.nome_completo")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.nome || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.cpf")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg font-mono">{pessoa.cpf || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.rg")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.rg || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.data_nascimento")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.data_nascimento || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.sexo")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.sexo || "-"}</p>
                 </div>
               {:else}
                 <div class="md:col-span-2">
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.razao_social")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.razao_social || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.nome_fantasia")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.nome_fantasia || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.cnpj")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg font-mono">{pessoa.cnpj || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.inscricao_estadual")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.inscricao_estadual || "-"}</p>
                 </div>
 
                 <div>
-                  <label class="label">
+                  <div class="label">
                     <span class="label-text font-semibold">{$_("pessoas.inscricao_municipal")}</span>
-                  </label>
+                  </div>
                   <p class="text-lg">{pessoa.inscricao_municipal || "-"}</p>
                 </div>
               {/if}
@@ -204,23 +204,23 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.email")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.email || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.telefone")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.telefone || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.celular")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.celular || "-"}</p>
               </div>
             </div>
@@ -237,37 +237,37 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.cep")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.cep || "-"}</p>
               </div>
 
               <div class="md:col-span-2">
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.logradouro")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.logradouro || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.numero")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.numero || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.complemento")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.complemento || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.bairro")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.bairro || "-"}</p>
               </div>
 

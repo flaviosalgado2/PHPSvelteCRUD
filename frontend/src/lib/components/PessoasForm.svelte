@@ -8,33 +8,60 @@
   const API_URL = "http://localhost:8000/api";
 
   let enviando = $state(false);
-  let tipo = $state(pessoa?.tipo || "fisica");
+  let tipo = $state("fisica");
 
   // Campos Pessoa Física
-  let cpf = $state(pessoa?.cpf || "");
-  let nome = $state(pessoa?.nome || "");
-  let dataNascimento = $state(pessoa?.data_nascimento || "");
-  let rg = $state(pessoa?.rg || "");
-  let sexo = $state(pessoa?.sexo || "");
+  let cpf = $state("");
+  let nome = $state("");
+  let dataNascimento = $state("");
+  let rg = $state("");
+  let sexo = $state("");
 
   // Campos Pessoa Jurídica
-  let cnpj = $state(pessoa?.cnpj || "");
-  let razaoSocial = $state(pessoa?.razao_social || "");
-  let nomeFantasia = $state(pessoa?.nome_fantasia || "");
-  let inscricaoEstadual = $state(pessoa?.inscricao_estadual || "");
-  let inscricaoMunicipal = $state(pessoa?.inscricao_municipal || "");
+  let cnpj = $state("");
+  let razaoSocial = $state("");
+  let nomeFantasia = $state("");
+  let inscricaoEstadual = $state("");
+  let inscricaoMunicipal = $state("");
 
   // Campos comuns
-  let email = $state(pessoa?.email || "");
-  let telefone = $state(pessoa?.telefone || "");
-  let celular = $state(pessoa?.celular || "");
-  let cep = $state(pessoa?.cep || "");
-  let logradouro = $state(pessoa?.logradouro || "");
-  let numero = $state(pessoa?.numero || "");
-  let complemento = $state(pessoa?.complemento || "");
-  let bairro = $state(pessoa?.bairro || "");
-  let cidade = $state(pessoa?.cidade || "");
-  let estado = $state(pessoa?.estado || "");
+  let email = $state("");
+  let telefone = $state("");
+  let celular = $state("");
+  let cep = $state("");
+  let logradouro = $state("");
+  let numero = $state("");
+  let complemento = $state("");
+  let bairro = $state("");
+  let cidade = $state("");
+  let estado = $state("");
+
+  // Sincronizar com a prop pessoa quando ela mudar
+  $effect(() => {
+    if (pessoa) {
+      tipo = pessoa.tipo || "fisica";
+      cpf = pessoa.cpf || "";
+      nome = pessoa.nome || "";
+      dataNascimento = pessoa.data_nascimento || "";
+      rg = pessoa.rg || "";
+      sexo = pessoa.sexo || "";
+      cnpj = pessoa.cnpj || "";
+      razaoSocial = pessoa.razao_social || "";
+      nomeFantasia = pessoa.nome_fantasia || "";
+      inscricaoEstadual = pessoa.inscricao_estadual || "";
+      inscricaoMunicipal = pessoa.inscricao_municipal || "";
+      email = pessoa.email || "";
+      telefone = pessoa.telefone || "";
+      celular = pessoa.celular || "";
+      cep = pessoa.cep || "";
+      logradouro = pessoa.logradouro || "";
+      numero = pessoa.numero || "";
+      complemento = pessoa.complemento || "";
+      bairro = pessoa.bairro || "";
+      cidade = pessoa.cidade || "";
+      estado = pessoa.estado || "";
+    }
+  });
 
   async function submeterFormulario(event) {
     event.preventDefault();
@@ -158,13 +185,14 @@
         {#if tipo === "fisica"}
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="form-control md:col-span-2">
-              <label class="label">
+              <label class="label" for="nome">
                 <span class="label-text font-semibold flex items-center gap-1">
                   <span class="text-error">*</span>
                   {$_("pessoas.nome_completo")}
                 </span>
               </label>
               <input
+                id="nome"
                 type="text"
                 bind:value={nome}
                 class="input input-bordered"
@@ -174,13 +202,14 @@
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="cpf">
                 <span class="label-text font-semibold flex items-center gap-1">
                   <span class="text-error">*</span>
                   {$_("pessoas.cpf")}
                 </span>
               </label>
               <input
+                id="cpf"
                 type="text"
                 bind:value={cpf}
                 class="input input-bordered"
@@ -190,24 +219,24 @@
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="rg">
                 <span class="label-text font-semibold">{$_("pessoas.rg")}</span>
               </label>
-              <input type="text" bind:value={rg} class="input input-bordered" placeholder="00.000.000-0" />
+              <input id="rg" type="text" bind:value={rg} class="input input-bordered" placeholder="00.000.000-0" />
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="dataNascimento">
                 <span class="label-text font-semibold">{$_("pessoas.data_nascimento")}</span>
               </label>
-              <input type="date" bind:value={dataNascimento} class="input input-bordered" />
+              <input id="dataNascimento" type="date" bind:value={dataNascimento} class="input input-bordered" />
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="sexo">
                 <span class="label-text font-semibold">{$_("pessoas.sexo")}</span>
               </label>
-              <select bind:value={sexo} class="select select-bordered">
+              <select id="sexo" bind:value={sexo} class="select select-bordered">
                 <option value="">Selecione...</option>
                 <option value="masculino">{$_("pessoas.masculino")}</option>
                 <option value="feminino">{$_("pessoas.feminino")}</option>
@@ -218,13 +247,14 @@
         {:else}
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="form-control md:col-span-2">
-              <label class="label">
+              <label class="label" for="razaoSocial">
                 <span class="label-text font-semibold flex items-center gap-1">
                   <span class="text-error">*</span>
                   {$_("pessoas.razao_social")}
                 </span>
               </label>
               <input
+                id="razaoSocial"
                 type="text"
                 bind:value={razaoSocial}
                 class="input input-bordered"
@@ -234,20 +264,21 @@
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="nomeFantasia">
                 <span class="label-text font-semibold">{$_("pessoas.nome_fantasia")}</span>
               </label>
-              <input type="text" bind:value={nomeFantasia} class="input input-bordered" placeholder="Nome comercial" />
+              <input id="nomeFantasia" type="text" bind:value={nomeFantasia} class="input input-bordered" placeholder="Nome comercial" />
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="cnpj">
                 <span class="label-text font-semibold flex items-center gap-1">
                   <span class="text-error">*</span>
                   {$_("pessoas.cnpj")}
                 </span>
               </label>
               <input
+                id="cnpj"
                 type="text"
                 bind:value={cnpj}
                 class="input input-bordered"
@@ -257,17 +288,17 @@
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="inscricaoEstadual">
                 <span class="label-text font-semibold">{$_("pessoas.inscricao_estadual")}</span>
               </label>
-              <input type="text" bind:value={inscricaoEstadual} class="input input-bordered" />
+              <input id="inscricaoEstadual" type="text" bind:value={inscricaoEstadual} class="input input-bordered" />
             </div>
 
             <div class="form-control">
-              <label class="label">
+              <label class="label" for="inscricaoMunicipal">
                 <span class="label-text font-semibold">{$_("pessoas.inscricao_municipal")}</span>
               </label>
-              <input type="text" bind:value={inscricaoMunicipal} class="input input-bordered" />
+              <input id="inscricaoMunicipal" type="text" bind:value={inscricaoMunicipal} class="input input-bordered" />
             </div>
           </div>
         {/if}
@@ -284,24 +315,24 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control md:col-span-2">
-            <label class="label">
+            <label class="label" for="email">
               <span class="label-text font-semibold">{$_("pessoas.email")}</span>
             </label>
-            <input type="email" bind:value={email} class="input input-bordered" placeholder="email@exemplo.com" />
+            <input id="email" type="email" bind:value={email} class="input input-bordered" placeholder="email@exemplo.com" />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="telefone">
               <span class="label-text font-semibold">{$_("pessoas.telefone")}</span>
             </label>
-            <input type="tel" bind:value={telefone} class="input input-bordered" placeholder="(00) 0000-0000" />
+            <input id="telefone" type="tel" bind:value={telefone} class="input input-bordered" placeholder="(00) 0000-0000" />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="celular">
               <span class="label-text font-semibold">{$_("pessoas.celular")}</span>
             </label>
-            <input type="tel" bind:value={celular} class="input input-bordered" placeholder="(00) 00000-0000" />
+            <input id="celular" type="tel" bind:value={celular} class="input input-bordered" placeholder="(00) 00000-0000" />
           </div>
         </div>
       </div>
@@ -317,52 +348,52 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="cep">
               <span class="label-text font-semibold">{$_("pessoas.cep")}</span>
             </label>
-            <input type="text" bind:value={cep} class="input input-bordered" placeholder="00000-000" />
+            <input id="cep" type="text" bind:value={cep} class="input input-bordered" placeholder="00000-000" />
           </div>
 
           <div class="form-control md:col-span-2 lg:col-span-3">
-            <label class="label">
+            <label class="label" for="logradouro">
               <span class="label-text font-semibold">{$_("pessoas.logradouro")}</span>
             </label>
-            <input type="text" bind:value={logradouro} class="input input-bordered" placeholder="Rua, Avenida, etc." />
+            <input id="logradouro" type="text" bind:value={logradouro} class="input input-bordered" placeholder="Rua, Avenida, etc." />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="numero">
               <span class="label-text font-semibold">{$_("pessoas.numero")}</span>
             </label>
-            <input type="text" bind:value={numero} class="input input-bordered" placeholder="123" />
+            <input id="numero" type="text" bind:value={numero} class="input input-bordered" placeholder="123" />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="complemento">
               <span class="label-text font-semibold">{$_("pessoas.complemento")}</span>
             </label>
-            <input type="text" bind:value={complemento} class="input input-bordered" placeholder="Apto, Sala, etc." />
+            <input id="complemento" type="text" bind:value={complemento} class="input input-bordered" placeholder="Apto, Sala, etc." />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="bairro">
               <span class="label-text font-semibold">{$_("pessoas.bairro")}</span>
             </label>
-            <input type="text" bind:value={bairro} class="input input-bordered" />
+            <input id="bairro" type="text" bind:value={bairro} class="input input-bordered" />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="cidade">
               <span class="label-text font-semibold">{$_("pessoas.cidade")}</span>
             </label>
-            <input type="text" bind:value={cidade} class="input input-bordered" />
+            <input id="cidade" type="text" bind:value={cidade} class="input input-bordered" />
           </div>
 
           <div class="form-control">
-            <label class="label">
+            <label class="label" for="estado">
               <span class="label-text font-semibold">{$_("pessoas.estado")}</span>
             </label>
-            <select bind:value={estado} class="select select-bordered">
+            <select id="estado" bind:value={estado} class="select select-bordered">
               <option value="">Selecione...</option>
               <option value="AC">AC</option>
               <option value="AL">AL</option>
