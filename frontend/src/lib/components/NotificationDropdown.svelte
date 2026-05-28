@@ -110,6 +110,9 @@
         <div 
           class="p-4 border-b border-base-200 hover:bg-base-50 cursor-pointer transition-colors {!notification.read ? 'bg-primary/5' : ''}"
           on:click={() => handleNotificationClick(notification)}
+          on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleNotificationClick(notification)}
+          role="button"
+          tabindex="0"
           use:motionHover
         >
           <div class="flex items-start space-x-3 overflow-x-hidden">

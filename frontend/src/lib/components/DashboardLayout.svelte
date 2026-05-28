@@ -24,7 +24,6 @@
   <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Header -->
     <Header 
-      sidebarOpen={sidebarOpen} 
       on:toggleSidebar={handleToggleSidebar}
     />
     

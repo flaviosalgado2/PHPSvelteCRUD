@@ -41,6 +41,9 @@
   <div 
     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300"
     on:click={handleBackdropClick}
+    on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleBackdropClick(e)}
+    role="button"
+    tabindex="-1"
   >
     <div 
       class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100"

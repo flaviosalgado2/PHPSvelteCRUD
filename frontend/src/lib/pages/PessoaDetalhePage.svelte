@@ -272,16 +272,16 @@
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.cidade")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.cidade || "-"}</p>
               </div>
 
               <div>
-                <label class="label">
+                <div class="label">
                   <span class="label-text font-semibold">{$_("pessoas.estado")}</span>
-                </label>
+                </div>
                 <p class="text-lg">{pessoa.estado || "-"}</p>
               </div>
             </div>

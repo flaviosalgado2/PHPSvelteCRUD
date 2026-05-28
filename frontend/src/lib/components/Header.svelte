@@ -13,8 +13,6 @@
   import { getUnreadNotificationsCount, getUnreadMessagesCount } from '../data/notifications.js';
   import { _, isLoading } from 'svelte-i18n';
   
-  export let sidebarOpen = false;
-  
   const dispatch = createEventDispatcher();
   
   // Generate avatar URL for admin user

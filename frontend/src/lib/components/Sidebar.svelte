@@ -54,6 +54,7 @@
   <div 
     class="fixed inset-0 z-40 bg-neutral bg-opacity-75 lg:hidden transition-opacity duration-300"
     on:click={closeSidebar}
+    on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? closeSidebar() : null}
     role="button"
     tabindex="-1"
   ></div>
