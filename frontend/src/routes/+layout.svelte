@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import DashboardLayout from '$lib/components/DashboardLayout.svelte';
+	import ToastContainer from '$lib/components/ToastContainer.svelte';
 	import { themeActions } from '$lib/stores/theme.js';
 	import { i18nReadyPromise } from '$lib/i18n/index.js';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
@@ -53,3 +54,5 @@
 		{@render children()}
 	</DashboardLayout>
 {/if}
+
+<ToastContainer />

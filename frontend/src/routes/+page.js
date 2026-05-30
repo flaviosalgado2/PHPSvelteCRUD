@@ -1,3 +1,2 @@
-// since there's no dynamic data here, we can prerender
-// it so that it gets served as a static asset in production
-export const prerender = true;
+// Dashboard tem dados dinâmicos, não deve ser pré-renderizado
+export const prerender = false;

@@ -4,8 +4,8 @@
   import { _ } from "svelte-i18n";
   import { motionInView, staggerAnimate } from "../utils/motion.js";
   import DeleteConfirmationModal from "../components/DeleteConfirmationModal.svelte";
-
-  const API_URL = "http://localhost:8000/api";
+  import { pessoasService } from "$lib/services/pessoas.js";
+  import { toast } from "$lib/stores/toast.js";
 
   let pessoas = $state([]);
   let filteredPessoas = $state([]);
@@ -32,12 +32,10 @@
     try {
       loading = true;
       error = null;
-      const response = await fetch(`${API_URL}/pessoas`);
-      if (!response.ok) throw new Error("Erro ao carregar pessoas");
-      pessoas = await response.json();
+      pessoas = await pessoasService.listar();
     } catch (e) {
       error = e.message;
-      console.error("Erro:", e);
+      toast.error("Erro ao carregar pessoas.");
     } finally {
       loading = false;
     }
@@ -47,15 +45,13 @@
     if (!pessoaParaExcluir) return;
 
     try {
-      const response = await fetch(`${API_URL}/pessoas/${pessoaParaExcluir.id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Erro ao excluir pessoa");
+      await pessoasService.excluir(pessoaParaExcluir.id);
+      toast.success("Pessoa excluída com sucesso.");
       await carregarPessoas();
       pessoaParaExcluir = null;
       showDeleteModal = false;
     } catch (e) {
-      alert("Erro ao excluir pessoa: " + e.message);
+      toast.error("Erro ao excluir pessoa: " + e.message);
     }
   }
 

@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
-
-	const API_URL = 'http://localhost:8000/api';
+	import { pessoasService } from '$lib/services/pessoas.js';
+	import { toast } from '$lib/stores/toast.js';
 
 	let statistics = $state({
 		total: 0,
@@ -22,11 +22,11 @@
 	async function carregarEstatisticas() {
 		try {
 			loading = true;
-			const response = await fetch(`${API_URL}/pessoas/statistics`);
-			if (!response.ok) throw new Error('Erro ao carregar estatísticas');
-			statistics = await response.json();
+			error = null;
+			statistics = await pessoasService.estatisticas();
 		} catch (e) {
 			error = e.message;
+			toast.error('Erro ao carregar estatísticas.');
 		} finally {
 			loading = false;
 		}

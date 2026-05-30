@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import PessoasForm from '$lib/components/PessoasForm.svelte';
-
-	const API_URL = 'http://localhost:8000/api';
+	import { pessoasService } from '$lib/services/pessoas.js';
+	import { toast } from '$lib/stores/toast.js';
 	
 	let pessoa = $state(null);
 	let carregando = $state(true);
@@ -14,12 +14,10 @@
 		try {
 			carregando = true;
 			erro = null;
-			const response = await fetch(`${API_URL}/pessoas/${pessoaId}`);
-			if (!response.ok) throw new Error('Pessoa não encontrada');
-			pessoa = await response.json();
+			pessoa = await pessoasService.buscar(pessoaId);
 		} catch (e) {
 			erro = e.message;
-			console.error('Erro:', e);
+			toast.error('Pessoa não encontrada.');
 		} finally {
 			carregando = false;
 		}

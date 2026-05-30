@@ -2,151 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pessoa;
-use Illuminate\Http\Request;
+use App\Http\Requests\PessoaRequest;
+use App\Http\Resources\PessoaResource;
+use App\Services\PessoaService;
 
 class PessoaController extends Controller
 {
+    public function __construct(private PessoaService $service) {}
+
     public function index()
     {
-        $pessoas = Pessoa::orderBy('created_at', 'desc')->get();
-        return response()->json($pessoas);
+        return PessoaResource::collection($this->service->listar());
     }
 
     public function statistics()
     {
-        $total = Pessoa::count();
-        $totalFisicas = Pessoa::where('tipo', 'fisica')->count();
-        $totalJuridicas = Pessoa::where('tipo', 'juridica')->count();
-        
-        // Cadastros hoje
-        $hoje = Pessoa::whereDate('created_at', today())->count();
-        
-        // Cadastros esta semana
-        $inicioDaSemana = now()->startOfWeek();
-        $fimDaSemana = now()->endOfWeek();
-        $estaSemana = Pessoa::whereBetween('created_at', [$inicioDaSemana, $fimDaSemana])->count();
-        
-        // Cadastros este mês
-        $esteMes = Pessoa::whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->count();
-        
-        // Últimos 7 dias (para gráfico)
-        $ultimos7Dias = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $data = now()->subDays($i);
-            $count = Pessoa::whereDate('created_at', $data->toDateString())->count();
-            $ultimos7Dias[] = [
-                'data' => $data->format('d/m'),
-                'count' => $count
-            ];
-        }
-        
-        // Cadastros recentes (últimos 5)
-        $recentes = Pessoa::orderBy('created_at', 'desc')->take(5)->get();
-        
-        return response()->json([
-            'total' => $total,
-            'totalFisicas' => $totalFisicas,
-            'totalJuridicas' => $totalJuridicas,
-            'hoje' => $hoje,
-            'estaSemana' => $estaSemana,
-            'esteMes' => $esteMes,
-            'ultimos7Dias' => $ultimos7Dias,
-            'recentes' => $recentes
-        ]);
+        $stats = $this->service->estatisticas();
+        $stats['recentes'] = PessoaResource::collection($stats['recentes']);
+        return response()->json($stats);
     }
 
     public function show($id)
     {
-        $pessoa = Pessoa::find($id);
-        
-        if (!$pessoa) {
-            return response()->json(['message' => 'Pessoa não encontrada'], 404);
-        }
-        
-        return response()->json($pessoa);
+        return new PessoaResource($this->service->buscar($id));
     }
 
-    public function store(Request $request)
+    public function store(PessoaRequest $request)
     {
-        $data = $request->validate([
-            'tipo' => 'required|in:fisica,juridica',
-            'cpf' => 'nullable|string',
-            'nome' => 'nullable|string',
-            'data_nascimento' => 'nullable|date',
-            'rg' => 'nullable|string',
-            'sexo' => 'nullable|string',
-            'cnpj' => 'nullable|string',
-            'razao_social' => 'nullable|string',
-            'nome_fantasia' => 'nullable|string',
-            'inscricao_estadual' => 'nullable|string',
-            'inscricao_municipal' => 'nullable|string',
-            'email' => 'nullable|email',
-            'telefone' => 'nullable|string',
-            'celular' => 'nullable|string',
-            'cep' => 'nullable|string',
-            'logradouro' => 'nullable|string',
-            'numero' => 'nullable|string',
-            'complemento' => 'nullable|string',
-            'bairro' => 'nullable|string',
-            'cidade' => 'nullable|string',
-            'estado' => 'nullable|string',
-        ]);
-
-        $pessoa = Pessoa::create($data);
-        
-        return response()->json($pessoa, 201);
+        $pessoa = $this->service->criar($request->validated());
+        return (new PessoaResource($pessoa))->response()->setStatusCode(201);
     }
 
-    public function update(Request $request, $id)
+    public function update(PessoaRequest $request, $id)
     {
-        $pessoa = Pessoa::find($id);
-        
-        if (!$pessoa) {
-            return response()->json(['message' => 'Pessoa não encontrada'], 404);
-        }
-
-        $data = $request->validate([
-            'tipo' => 'required|in:fisica,juridica',
-            'cpf' => 'nullable|string',
-            'nome' => 'nullable|string',
-            'data_nascimento' => 'nullable|date',
-            'rg' => 'nullable|string',
-            'sexo' => 'nullable|string',
-            'cnpj' => 'nullable|string',
-            'razao_social' => 'nullable|string',
-            'nome_fantasia' => 'nullable|string',
-            'inscricao_estadual' => 'nullable|string',
-            'inscricao_municipal' => 'nullable|string',
-            'email' => 'nullable|email',
-            'telefone' => 'nullable|string',
-            'celular' => 'nullable|string',
-            'cep' => 'nullable|string',
-            'logradouro' => 'nullable|string',
-            'numero' => 'nullable|string',
-            'complemento' => 'nullable|string',
-            'bairro' => 'nullable|string',
-            'cidade' => 'nullable|string',
-            'estado' => 'nullable|string',
-        ]);
-
-        $pessoa->update($data);
-        
-        return response()->json($pessoa);
+        $pessoa = $this->service->buscar($id);
+        return new PessoaResource($this->service->atualizar($pessoa, $request->validated()));
     }
 
     public function destroy($id)
     {
-        $pessoa = Pessoa::find($id);
-        
-        if (!$pessoa) {
-            return response()->json(['message' => 'Pessoa não encontrada'], 404);
-        }
-        
-        $pessoa->delete();
-        
+        $this->service->excluir($this->service->buscar($id));
         return response()->json(['message' => 'Pessoa excluída com sucesso']);
     }
 }

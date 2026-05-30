@@ -2,52 +2,47 @@
   import Icon from "@iconify/svelte";
   import { _ } from "svelte-i18n";
   import { goto } from "$app/navigation";
+  import { pessoasService } from "$lib/services/pessoas.js";
+  import { toast } from "$lib/stores/toast.js";
+  import DeleteConfirmationModal from "$lib/components/DeleteConfirmationModal.svelte";
 
   let { pessoaId } = $props();
-
-  const API_URL = "http://localhost:8000/api";
 
   let pessoa = $state(null);
   let carregando = $state(true);
   let erro = $state(null);
+  let showDeleteModal = $state(false);
 
   async function carregarPessoa() {
     try {
       carregando = true;
       erro = null;
-      const response = await fetch(`${API_URL}/pessoas/${pessoaId}`);
-      if (!response.ok) throw new Error("Erro ao carregar pessoa");
-      pessoa = await response.json();
+      pessoa = await pessoasService.buscar(pessoaId);
     } catch (e) {
       erro = e.message;
-      console.error("Erro:", e);
     } finally {
       carregando = false;
     }
   }
 
-  async function excluirPessoa() {
-    if (!confirm("Tem certeza que deseja excluir esta pessoa?")) return;
-
+  async function confirmarExclusao() {
     try {
-      const response = await fetch(`${API_URL}/pessoas/${pessoaId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Erro ao excluir pessoa");
+      await pessoasService.excluir(pessoaId);
+      toast.success("Pessoa excluída com sucesso.");
       goto("/pessoas");
     } catch (e) {
-      alert("Erro ao excluir pessoa: " + e.message);
+      toast.error("Erro ao excluir pessoa: " + e.message);
     }
   }
 
   function obterNome() {
     if (!pessoa) return "";
-    return pessoa.tipo === "fisica" ? pessoa.nome : pessoa.razao_social;
+    return (pessoa.nome_exibicao ?? (pessoa.tipo === "fisica" ? pessoa.nome : pessoa.razao_social)) ?? "";
   }
 
   function obterDocumento() {
     if (!pessoa) return "";
-    return pessoa.tipo === "fisica" ? pessoa.cpf : pessoa.cnpj;
+    return pessoa.documento_principal ?? (pessoa.tipo === "fisica" ? pessoa.cpf : pessoa.cnpj);
   }
 
   $effect(() => {
@@ -83,7 +78,7 @@
           <Icon icon="heroicons:pencil-square" class="w-5 h-5" />
           {$_("common.edit")}
         </a>
-        <button onclick={excluirPessoa} class="btn btn-error gap-2">
+        <button onclick={() => (showDeleteModal = true)} class="btn btn-error gap-2">
           <Icon icon="heroicons:trash" class="w-5 h-5" />
           {$_("common.delete")}
         </button>
@@ -296,7 +291,7 @@
           <div class="card-body items-center p-6">
             <div class="avatar placeholder">
               <div class="bg-{pessoa.tipo === 'fisica' ? 'primary' : 'secondary'}/20 text-{pessoa.tipo === 'fisica' ? 'primary' : 'secondary'} rounded-full w-32 h-32">
-                <span class="text-5xl font-bold">{obterNome().charAt(0).toUpperCase()}</span>
+                <span class="text-5xl font-bold">{obterNome().charAt(0).toUpperCase() || "?"}</span>
               </div>
             </div>
             <h3 class="text-xl font-bold mt-4 text-center">{obterNome()}</h3>
@@ -313,7 +308,7 @@
                 <Icon icon="heroicons:pencil-square" class="w-5 h-5" />
                 {$_("common.edit")}
               </a>
-              <button onclick={excluirPessoa} class="btn btn-outline btn-error btn-block justify-start gap-2">
+              <button onclick={() => (showDeleteModal = true)} class="btn btn-outline btn-error btn-block justify-start gap-2">
                 <Icon icon="heroicons:trash" class="w-5 h-5" />
                 {$_("common.delete")}
               </button>
@@ -324,3 +319,10 @@
     </div>
   {/if}
 </div>
+
+<DeleteConfirmationModal
+  isOpen={showDeleteModal}
+  itemName={obterNome()}
+  onConfirm={confirmarExclusao}
+  onCancel={() => (showDeleteModal = false)}
+/>
